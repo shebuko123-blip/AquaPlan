@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200" role="img" aria-labelledby="icono-titulo">
+  <title id="icono-titulo">AquaPlan</title>
+  <!-- Círculo de fondo -->
+  <circle cx="100" cy="100" r="100" fill="#0E4A6B"/>
+  <!-- Gota -->
+  <path d="M100,34 C128,72 150,98 150,124 A50,50 0 0 1 50,124 C50,98 72,72 100,34 Z" fill="#FFFFFF"/>
+  <!-- Hoja -->
+  <g transform="translate(102,120) rotate(-35)">
+    <ellipse cx="0" cy="0" rx="15" ry="30" fill="#3E8DC4"/>
+    <line x1="0" y1="-25" x2="0" y2="25" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round"/>
+  </g>
+  <!-- Punto amarillo -->
+  <circle cx="140" cy="50" r="9" fill="#FDB813"/>
+</svg>

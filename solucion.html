@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AquaPlan · Calcula tu consumo de agua</title>
+  <meta name="description" content="AquaPlan: calcula cuánta agua usa tu hogar, en qué se va y cómo ahorrar en tu recibo.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="solucion.css">
+</head>
+<body data-modo="app">
+
+  <a class="saltar" href="#contenido">Saltar al contenido</a>
+
+  <!-- =====================================================
+       HEADER
+       ===================================================== -->
+  <header class="header">
+    <div class="container header__inner">
+      <a href="#/inicio" class="logo" aria-label="AquaPlan, ir al inicio de la demo">
+        <img src="images/logo-icono.svg" alt="" width="40" height="40">
+        <span class="logo__text">AquaPlan</span>
+      </a>
+      <a href="index.html" class="header__link">Guardar y salir</a>
+    </div>
+  </header>
+
+  <!-- Las 3 etapas de la demo -->
+  <nav class="fases" aria-label="Etapas de la demo">
+    <ol class="container fases__lista">
+      <li><a class="fase" data-fase="1"><span class="fase__num">1</span>Calcula</a></li>
+      <li><a class="fase" data-fase="2"><span class="fase__num">2</span>Planifica</a></li>
+      <li><a class="fase" data-fase="3"><span class="fase__num">3</span>Hazlo hábito</a></li>
+    </ol>
+  </nav>
+
+  <main id="contenido" class="container main">
+
+    <!-- =====================================================
+         PROGRESO DEL CUESTIONARIO (solo en sus 5 pasos)
+         ===================================================== -->
+    <section class="progress solo-pasos" aria-label="Progreso del cuestionario">
+      <div class="progress__top">
+        <span id="paso-texto">Paso 1 de 5</span>
+        <span id="paso-porcentaje">20%</span>
+      </div>
+      <div class="progress__bar"><div class="progress__fill" id="paso-barra"></div></div>
+
+      <ol class="steps">
+        <li class="step" data-step="1"><span class="step__num">1</span>Tu hogar</li>
+        <li class="step" data-step="2"><span class="step__num">2</span>Ducha</li>
+        <li class="step" data-step="3"><span class="step__num">3</span>Baño</li>
+        <li class="step" data-step="4"><span class="step__num">4</span>Cocina y ropa</li>
+        <li class="step" data-step="5"><span class="step__num">5</span>Casa y fugas</li>
+      </ol>
+    </section>
+
+
+    <!-- =====================================================
+         BIENVENIDA
+         ===================================================== -->
+    <section class="screen" id="inicio" aria-labelledby="t-inicio">
+      <div class="welcome card">
+        <span class="eyebrow">Demo de AquaPlan</span>
+        <h1 id="t-inicio" tabindex="-1">Descubre en qué se va el agua de tu hogar</h1>
+        <p class="welcome__texto">Responde unas preguntas sobre tus hábitos y te mostramos cuánta agua usa tu familia, cuánto pesa en tu recibo y cómo ahorrar.</p>
+
+        <ul class="welcome__lista">
+          <li><span class="num num--active">1</span><span><strong>Calcula</strong> tu consumo mensual estimado.</span></li>
+          <li><span class="num num--active">2</span><span><strong>Planifica</strong> tu ahorro con acciones para tu caso.</span></li>
+          <li><span class="num num--active">3</span><span><strong>Hazlo hábito</strong> con el apoyo de tu familia.</span></li>
+        </ul>
+
+        <!-- Usuario nuevo -->
+        <div id="inicio-nuevo">
+          <a href="#/hogar" class="btn btn--primary btn--tall">Empezar</a>
+          <p class="muted welcome__nota">Toma menos de 3 minutos. No pedimos datos personales.</p>
+        </div>
+
+        <!-- Usuario con avance guardado -->
+        <div id="inicio-continuar" hidden>
+          <p class="welcome__aviso">Tienes un avance guardado en este dispositivo.</p>
+          <div class="actions">
+            <button type="button" class="btn btn--secondary" id="empezar-de-nuevo">Empezar de nuevo</button>
+            <a href="#/hogar" class="btn btn--primary" id="continuar">Continuar donde lo dejé</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- =====================================================
+         PASO 1 · TU HOGAR
+         ===================================================== -->
+    <section class="screen" id="hogar" data-num="1" aria-labelledby="t-hogar">
+      <div class="page-title">
+        <h1 id="t-hogar" tabindex="-1">Cuéntanos de tu hogar</h1>
+        <p>Con estos datos ajustamos el cálculo a tu familia.</p>
+      </div>
+
+      <div class="layout">
+        <div class="card card--form">
+
+          <div class="field">
+            <span class="label" id="l-ciudad">¿Dónde vives?</span>
+            <div class="options options--3" role="radiogroup" aria-labelledby="l-ciudad" data-campo="ciudad">
+              <button type="button" class="option" role="radio" data-valor="lima">Lima</button>
+              <button type="button" class="option" role="radio" data-valor="callao">Callao</button>
+              <button type="button" class="option" role="radio" data-valor="otra">Otra ciudad</button>
+            </div>
+            <p class="hint" data-si="ciudad=otra">Usaremos una estimación basada en tarifas de Lima.</p>
+          </div>
+
+          <div class="field">
+            <label class="label" for="distrito">Distrito <span class="opcional">(opcional)</span></label>
+            <input class="input" type="text" id="distrito" maxlength="40" autocomplete="off" placeholder="Por ejemplo: Los Olivos">
+          </div>
+
+          <div class="field">
+            <span class="label" id="l-vivienda">Tipo de vivienda</span>
+            <div class="options options--2" role="radiogroup" aria-labelledby="l-vivienda" data-campo="vivienda">
+              <button type="button" class="option" role="radio" data-valor="departamento">Departamento</button>
+              <button type="button" class="option" role="radio" data-valor="casa">Casa</button>
+            </div>
+          </div>
+
+          <div class="field">
+            <span class="label" id="l-jardin">¿Tienes jardín, patio o plantas que riegas?</span>
+            <div class="options options--2" role="radiogroup" aria-labelledby="l-jardin" data-campo="jardin">
+              <button type="button" class="option" role="radio" data-valor="si">Sí</button>
+              <button type="button" class="option" role="radio" data-valor="no">No</button>
+            </div>
+          </div>
+
+          <div class="field">
+            <span class="label">¿Quiénes viven en casa?</span>
+            <div class="steppers">
+              <div class="stepper" data-contador="adultos" data-min="1" data-max="12" data-etiqueta="Adultos"></div>
+              <div class="stepper" data-contador="ninos" data-min="0" data-max="10" data-etiqueta="Niños"></div>
+              <div class="stepper" data-contador="mascotas" data-min="0" data-max="6" data-etiqueta="Mascotas"></div>
+            </div>
+          </div>
+
+          <p class="error" id="error-hogar" role="alert" hidden></p>
+
+          <a href="#/ducha" class="btn btn--primary" data-validar="hogar">Continuar</a>
+        </div>
+
+        <aside class="aside">
+          <div class="note">
+            <div class="note__head">
+              <span class="note__icon">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M12 2l8 3.5V11c0 5-3.5 9-8 11-4.5-2-8-6-8-11V5.5z" fill="#0E4A6B"/>
+                  <path d="M8.5 12l2.5 2.5 4.5-5" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </span>
+              <h2>Tus datos son privados</h2>
+            </div>
+            <p>No pedimos nombre, DNI ni número de suministro. Tus respuestas se guardan solo en este dispositivo.</p>
+          </div>
+
+          <div class="fact">
+            <p class="fact__eyebrow">¿Sabías que?</p>
+            <p class="fact__text">Lima es una de las ciudades más grandes del mundo construidas sobre un desierto. Cada litro cuenta.</p>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+
+    <!-- =====================================================
+         PASO 2 · DUCHA
+         ===================================================== -->
+    <section class="screen" id="ducha" data-num="2" aria-labelledby="t-ducha">
+      <div class="page-title">
+        <h1 id="t-ducha" tabindex="-1">La ducha</h1>
+        <p>Responde con lo que pasa normalmente en casa. No hay respuestas incorrectas.</p>
+      </div>
+
+      <div class="layout">
+        <div class="card card--form">
+
+          <div class="field">
+            <span class="label" id="l-duchaMin">¿Cuánto dura una ducha, en promedio?</span>
+            <div class="options options--4" role="radiogroup" aria-labelledby="l-duchaMin" data-campo="duchaMin">
+              <button type="button" class="option" role="radio" data-valor="5">Unos 5 min</button>
+              <button type="button" class="option" role="radio" data-valor="10">Unos 10 min</button>
+              <button type="button" class="option" role="radio" data-valor="15">Unos 15 min</button>
+              <button type="button" class="option" role="radio" data-valor="20">20 min o más</button>
+            </div>
+          </div>
+
+          <div class="field">
+            <span class="label" id="l-duchasDia">¿Cuántas veces se ducha cada persona?</span>
+            <div class="options options--3" role="radiogroup" aria-labelledby="l-duchasDia" data-campo="duchasDia">
+              <button type="button" class="option" role="radio" data-valor="0.5">Día por medio</button>
+              <button type="button" class="option" role="radio" data-valor="1">1 vez al día</button>
+              <button type="button" class="option" role="radio" data-valor="2">2 veces al día</button>
+            </div>
+          </div>
+
+          <div class="field">
+            <span class="label" id="l-duchaTipo">¿Qué tipo de ducha tienes?</span>
+            <div class="options options--3" role="radiogroup" aria-labelledby="l-duchaTipo" data-campo="duchaTipo">
+              <button type="button" class="option" role="radio" data-valor="normal">Normal</button>
+              <button type="button" class="option" role="radio" data-valor="ahorradora">Ahorradora</button>
+              <button type="button" class="option" role="radio" data-valor="nose">No lo sé</button>
+            </div>
+            <p class="hint">Una ducha ahorradora tiene un cabezal que reduce el chorro sin que se note.</p>
+          </div>
+
+          <div class="actions">
+            <a href="#/hogar" class="btn btn--secondary">Atrás</a>
+            <a href="#/bano" class="btn btn--primary">Siguiente</a>
+          </div>
+        </div>
+
+        <aside class="aside">
+          <div class="fact">
+            <p class="fact__eyebrow">¿Sabías que?</p>
+            <p class="fact__text">Una ducha de 10 minutos puede usar unos 100 litros de agua: cinco baldes grandes.</p>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+
+    <!-- =====================================================
+         PASO 3 · BAÑO
+         ===================================================== -->
+    <section class="screen" id="bano" data-num="3" aria-labelledby="t-bano">
+      <div class="page-title">
+        <h1 id="t-bano" tabindex="-1">El baño</h1>
+        <p>El inodoro y el caño del lavatorio.</p>
+      </div>
+
+      <div class="layout">
+        <div class="card card--form">
+
+          <div class="field">
+            <span class="label" id="l-inodoroTipo">¿Cómo es tu inodoro?</span>
+            <div class="options options--4" role="radiogroup" aria-labelledby="l-inodoroTipo" data-campo="inodoroTipo">
+              <button type="button" class="option" role="radio" data-valor="antiguo">Antiguo, tanque grande</button>
+              <button type="button" class="option" role="radio" data-valor="estandar">Estándar</button>
+              <button type="button" class="option" role="radio" data-valor="doble">Doble descarga</button>
+              <button type="button" class="option" role="radio" data-valor="nose">No lo sé</button>
+            </div>
+            <p class="hint">El de doble descarga tiene dos botones: uno chico y uno grande.</p>
+          </div>
+
+          <div class="field">
+            <span class="label" id="l-descargas">¿Cuántas veces al día lo usa cada persona en casa?</span>
+            <div class="options options--3" role="radiogroup" aria-labelledby="l-descargas" data-campo="descargas">
+              <button type="button" class="option" role="radio" data-valor="3">3 o menos</button>
+              <button type="button" class="option" role="radio" data-valor="5">4 a 6</button>
+              <button type="button" class="option" role="radio" data-valor="7">7 o más</button>
+            </div>
+          </div>
+
+          <div class="field">
+            <span class="label" id="l-cano">Al lavarse las manos o los dientes, ¿el caño…?</span>
+            <div class="options options--3" role="radiogroup" aria-labelledby="l-cano" data-campo="cano">
+              <button type="button" class="option" role="radio" data-valor="cerrado">Se cierra</button>
+              <button type="button" class="option" role="radio" data-valor="aveces">A veces se cierra</button>
+              <button type="button" class="option" role="radio" data-valor="abierto">Queda abierto</button>
+            </div>
+          </div>
+
+          <div class="actions">
+            <a href="#/ducha" class="btn btn--secondary">Atrás</a>
+            <a href="#/cocina" class="btn btn--primary">Siguiente</a>
+          </div>
+        </div>
+
+        <aside class="aside">
+          <div class="fact">
+            <p class="fact__eyebrow">¿Sabías que?</p>
+            <p class="fact__text">Un inodoro antiguo usa hasta 13 litros por descarga, el doble que uno moderno.</p>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+
+    <!-- =====================================================
+         PASO 4 · COCINA Y ROPA
+         ===================================================== -->
+    <section class="screen" id="cocina" data-num="4" aria-labelledby="t-cocina">
+      <div class="page-title">
+        <h1 id="t-cocina" tabindex="-1">Cocina y ropa</h1>
+        <p>Cómo se lavan los platos y la ropa en casa.</p>
+      </div>
+
+      <div class="layout">
+        <div class="card card--form">
+
+          <div class="field">
+            <span class="label" id="l-platosMetodo">¿Cómo lavan los platos?</span>
+            <div class="options options--3" role="radiogroup" aria-labelledby="l-platosMetodo" data-campo="platosMetodo">
+              <button type="button" class="option" role="radio" data-valor="cano">A mano, con el caño abierto</button>
+              <button type="button" class="option" role="radio" data-valor="tina">A mano, con tina o lavatorio lleno</button>
+              <button type="button" class="option" role="radio" data-valor="lavavajillas">Con lavavajillas</button>
+            </div>
+          </div>
+
+          <div class="field">
+            <span class="label" id="l-platosVeces">¿Cuántas veces al día?</span>
+            <div class="options options--3" role="radiogroup" aria-labelledby="l-platosVeces" data-campo="platosVeces">
+              <button type="button" class="option" role="radio" data-valor="1">1 vez</button>
+              <button type="button" class="option" role="radio" data-valor="2">2 veces</button>
+              <button type="button" class="option" role="radio" data-valor="3">3 o más</button>
+            </div>
+          </div>
+
+          <hr class="divider divider--plain">
+
+          <div class="field">
+            <span class="label" id="l-ropaMetodo">¿Cómo lavan la ropa?</span>
+            <div class="options options--2" role="radiogroup" aria-labelledby="l-ropaMetodo" data-campo="ropaMetodo">
+              <button type="button" class="option" role="radio" data-valor="lavadora">Con lavadora</button>
+              <button type="button" class="option" role="radio" data-valor="mano">A mano</button>
+            </div>
+          </div>
+
+          <div class="field" data-si="ropaMetodo=lavadora">
+            <span class="label" id="l-ropaCarga">¿Cómo suelen cargar la lavadora?</span>
+            <div class="options options--2" role="radiogroup" aria-labelledby="l-ropaCarga" data-campo="ropaCarga">
+              <button type="button" class="option" role="radio" data-valor="completa">Llena</button>
+              <button type="button" class="option" role="radio" data-valor="media">A medias</button>
+            </div>
+          </div>
+
+          <div class="field">
+            <div class="steppers">
+              <div class="stepper" data-contador="ropaVeces" data-min="0" data-max="14" data-etiqueta="Lavadas de ropa por semana"></div>
+            </div>
+          </div>
+
+          <div class="actions">
+            <a href="#/bano" class="btn btn--secondary">Atrás</a>
+            <a href="#/casa" class="btn btn--primary">Siguiente</a>
+          </div>
+        </div>
+
+        <aside class="aside">
+          <div class="fact">
+            <p class="fact__eyebrow">¿Sabías que?</p>
+            <p class="fact__text">Lavar los platos con el caño abierto puede gastar el triple de agua que hacerlo con una tina.</p>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+
+    <!-- =====================================================
+         PASO 5 · CASA Y FUGAS
+         ===================================================== -->
+    <section class="screen" id="casa" data-num="5" aria-labelledby="t-casa">
+      <div class="page-title">
+        <h1 id="t-casa" tabindex="-1">Casa y fugas</h1>
+        <p>Último paso: limpieza, exteriores y posibles fugas.</p>
+      </div>
+
+      <div class="layout">
+        <div class="card card--form">
+
+          <div class="field">
+            <div class="steppers">
+              <div class="stepper" data-contador="pisosVeces" data-min="0" data-max="14" data-etiqueta="Veces por semana que limpian los pisos"></div>
+            </div>
+          </div>
+
+          <div class="field">
+            <span class="label" id="l-auto">¿Lavan un auto o moto en casa?</span>
+            <div class="options options--3" role="radiogroup" aria-labelledby="l-auto" data-campo="auto">
+              <button type="button" class="option" role="radio" data-valor="no">No</button>
+              <button type="button" class="option" role="radio" data-valor="balde">Sí, con balde</button>
+              <button type="button" class="option" role="radio" data-valor="manguera">Sí, con manguera</button>
+            </div>
+            <div class="steppers" data-si="auto=balde|manguera">
+              <div class="stepper" data-contador="autoVeces" data-min="1" data-max="12" data-etiqueta="Lavados al mes"></div>
+            </div>
+          </div>
+
+          <div class="field" data-si="jardin=si">
+            <span class="label" id="l-riego">¿Cómo riegan el jardín o las plantas?</span>
+            <div class="options options--2" role="radiogroup" aria-labelledby="l-riego" data-campo="riego">
+              <button type="button" class="option" role="radio" data-valor="regadera">Con regadera o balde</button>
+              <button type="button" class="option" role="radio" data-valor="manguera">Con manguera</button>
+            </div>
+            <div class="steppers">
+              <div class="stepper" data-contador="riegoVeces" data-min="0" data-max="14" data-etiqueta="Riegos por semana"></div>
+            </div>
+          </div>
+
+          
+          <hr class="divider divider--plain">
+
+          <div class="field">
+            <span class="label" id="l-fugaCano">¿Algún caño gotea?</span>
+            <div class="options options--3" role="radiogroup" aria-labelledby="l-fugaCano" data-campo="fugaCano">
+              <button type="button" class="option" role="radio" data-valor="si">Sí</button>
+              <button type="button" class="option" role="radio" data-valor="no">No</button>
+              <button type="button" class="option" role="radio" data-valor="nose">No estoy seguro</button>
+            </div>
+          </div>
+
+          <div class="field">
+            <span class="label" id="l-fugaInodoro">¿El inodoro pierde agua o suena después de usarlo?</span>
+            <div class="options options--3" role="radiogroup" aria-labelledby="l-fugaInodoro" data-campo="fugaInodoro">
+              <button type="button" class="option" role="radio" data-valor="si">Sí</button>
+              <button type="button" class="option" role="radio" data-valor="no">No</button>
+              <button type="button" class="option" role="radio" data-valor="nose">No estoy seguro</button>
+            </div>
+          </div>
+
+          <div class="actions">
+            <a href="#/cocina" class="btn btn--secondary">Atrás</a>
+            <a href="#/resultado" class="btn btn--primary">Ver mi resultado</a>
+          </div>
+        </div>
+
+        <aside class="aside">
+          <div class="fact">
+            <p class="fact__eyebrow">¿Sabías que?</p>
+            <p class="fact__text">Un inodoro con fuga puede perder más de 100 litros al día sin que nadie lo note.</p>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+
+    <!-- =====================================================
+         RESULTADO · TU CONSUMO (fin de la HU01)
+         ===================================================== -->
+    <section class="screen" id="resultado" aria-labelledby="t-resultado">
+      <div class="page-head">
+        <div class="page-title page-title--tight">
+          <span class="eyebrow">Tu resultado</span>
+          <h1 id="t-resultado" tabindex="-1">Así usa el agua tu hogar</h1>
+          <p id="res-subtitulo"></p>
+        </div>
+        <a href="#/hogar" class="link">Editar mis respuestas</a>
+      </div>
+
+      <div class="kpis">
+        <div class="kpi kpi--main">
+          <p class="kpi__label">Tu hogar usa</p>
+          <p class="kpi__value kpi__value--xl" data-res="litrosDia"></p>
+          <p class="kpi__note">al día, en total</p>
+        </div>
+        <div class="kpi">
+          <p class="kpi__label">Por persona</p>
+          <p class="kpi__value" data-res="litrosPersona"></p>
+          <p class="kpi__note">al día en promedio</p>
+        </div>
+        <div class="kpi">
+          <p class="kpi__label">Al mes</p>
+          <p class="kpi__value" data-res="m3Mes"></p>
+          <p class="kpi__note">1 m³ = 1,000 litros</p>
+        </div>
+      </div>
+
+      <div class="layout layout--diag">
+        <div class="card chart">
+          <div class="chart__head">
+            <h2>¿En qué se va tu agua?</h2>
+            <span class="muted">Litros al día</span>
+          </div>
+          <ul class="chart__rows" id="barras"></ul>
+          <p class="chart__leyenda"><span class="top-badge">Top</span> Tus 3 actividades de mayor consumo</p>
+        </div>
+
+        <aside class="aside">
+          <div class="card insight">
+            <p class="insight__strong" id="res-insight"></p>
+            <p class="muted" id="res-top3"></p>
+          </div>
+
+          <div class="card compare">
+            <h2 class="aside__title">Comparado con Lima</h2>
+            <div class="compare__fila">
+              <span>Tu hogar</span>
+              <span class="bar"><span class="bar__fill bar__fill--top" id="cmp-hogar"></span></span>
+              <strong id="cmp-hogar-valor"></strong>
+            </div>
+            <div class="compare__fila">
+              <span>Promedio</span>
+              <span class="bar"><span class="bar__fill bar__fill--other" id="cmp-lima"></span></span>
+              <strong id="cmp-lima-valor"></strong>
+            </div>
+            <p class="muted" id="cmp-texto"></p>
+          </div>
+
+          <a href="#/recibo" class="btn btn--primary btn--tall">Ver cómo se refleja en mi recibo</a>
+        </aside>
+      </div>
+    </section>
+
+
+    <!-- =====================================================
+         RECIBO Y PLAN DE AHORRO (HU02)
+         ===================================================== -->
+    <section class="screen" id="recibo" aria-labelledby="t-recibo">
+      <div class="page-head">
+        <div class="page-title page-title--tight">
+          <span class="eyebrow">Paso 2 · Planifica</span>
+          <h1 id="t-recibo" tabindex="-1">Tu recibo y tu plan de ahorro</h1>
+          <p>Así se vería tu consumo en el recibo del mes y cuánto puedes bajarlo.</p>
+        </div>
+        <a href="#/resultado" class="link">Volver a mi resultado</a>
+      </div>
+
+      <div class="layout">
+        <!-- Recibo simulado: estilo propio de AquaPlan, no es un recibo oficial -->
+        <article class="card recibo" aria-labelledby="t-recibo-sim">
+          <header class="recibo__cabecera">
+            <div>
+              <p class="recibo__marca">AquaPlan</p>
+              <h2 id="t-recibo-sim">Recibo simulado de agua</h2>
+            </div>
+            <span class="pill">Estimación referencial</span>
+          </header>
+          <div class="recibo__consumo">
+            <span>Consumo del mes</span>
+            <strong id="recibo-m3"></strong>
+          </div>
+          <dl id="recibo-lineas"></dl>
+          <div class="recibo__total">
+            <span>Total estimado del mes</span>
+            <strong id="recibo-total"></strong>
+          </div>
+          <p class="muted recibo__nota" id="recibo-nota"></p>
+        </article>
+
+        <div class="card card--aside pago">
+          <label class="label" for="pago-real">¿Cuánto pagaste en tu último recibo?</label>
+          <div class="input-group">
+            <span class="input-group__addon" aria-hidden="true">S/</span>
+            <input id="pago-real" type="text" inputmode="decimal" autocomplete="off" maxlength="8" placeholder="Ej.: 85.50" aria-describedby="pago-ayuda">
+          </div>
+          <p class="hint" id="pago-ayuda">Opcional. Solo sirve para compararlo con la estimación y se queda en tu dispositivo.</p>
+          <p class="error" id="pago-error" role="alert" hidden>Escribe solo el monto en soles, por ejemplo 85.50.</p>
+          <p class="pago__resultado" id="pago-comparacion" aria-live="polite" hidden></p>
+        </div>
+      </div>
+
+      <div class="plan-head">
+        <h2 id="t-plan">Arma tu plan de ahorro</h2>
+        <p>Estas acciones salen de tus respuestas y empiezan por lo que más agua te consume. Elige de 3 a 5 que tu familia pueda cumplir.</p>
+      </div>
+
+      <div class="layout">
+        <ul class="actions-list" id="acciones" aria-labelledby="t-plan"></ul>
+
+        <div class="card card--aside proy" aria-labelledby="t-proy">
+          <h2 class="aside__title" id="t-proy">Tu recibo con el plan</h2>
+          <div class="proy__fila">
+            <span>Hoy <span class="muted" id="proy-hoy-m3"></span></span>
+            <strong id="proy-hoy"></strong>
+          </div>
+          <div class="proy__fila proy__fila--plan">
+            <span>Con tu plan <span class="muted" id="proy-plan-m3"></span></span>
+            <strong id="proy-plan"></strong>
+          </div>
+          <hr class="divider divider--flat">
+          <p class="muted">Ahorro estimado</p>
+          <p class="plan-total"><span id="proy-ahorro"></span> <small>al mes</small></p>
+          <p class="proy__anual" id="proy-anual"></p>
+          <ul class="plan-list" id="proy-lista"></ul>
+          <p class="muted proy__nota">El total se calcula con todas tus acciones juntas, por eso puede ser menor que la suma de cada una.</p>
+        </div>
+      </div>
+
+      <!-- Siempre visible: el ahorro se actualiza al marcar acciones -->
+      <div class="plan-barra">
+        <p id="plan-resumen" aria-live="polite"></p>
+        <button type="button" class="btn btn--primary" id="plan-guardar">Convertir mi plan en hábito</button>
+      </div>
+    </section>
+
+
+    <!-- =====================================================
+         MI HÁBITO (HU03)
+         ===================================================== -->
+    <section class="screen" id="habito" aria-labelledby="t-habito">
+      <div class="page-head">
+        <div class="page-title page-title--tight">
+          <span class="eyebrow">Paso 3 · Hazlo hábito</span>
+          <h1 id="t-habito" tabindex="-1">Tu plan en marcha</h1>
+          <p id="hab-subtitulo"></p>
+        </div>
+        <a href="#/recibo" class="link">Cambiar mi plan</a>
+      </div>
+
+      <div class="tip hab-aviso"><p id="hab-aviso" aria-live="polite"></p></div>
+
+      <div class="kpis">
+        <div class="kpi kpi--main">
+          <p class="kpi__label">Tu racha</p>
+          <p class="kpi__value kpi__value--xl" id="hab-racha"></p>
+          <p class="kpi__note" id="hab-racha-nota"></p>
+        </div>
+        <div class="kpi">
+          <p class="kpi__label">Agua ahorrada</p>
+          <p class="kpi__value" id="hab-litros"></p>
+          <p class="kpi__note" id="hab-equivalencia"></p>
+        </div>
+        <div class="kpi">
+          <p class="kpi__label">Dinero ahorrado</p>
+          <p class="kpi__value" id="hab-soles"></p>
+          <p class="kpi__note" id="hab-m3"></p>
+        </div>
+      </div>
+
+      <div class="layout layout--diag">
+        <div class="hab-col">
+
+          <!-- Check-in diario -->
+          <div class="card hab-card">
+            <h2 id="t-hoy">¿Qué cumplieron hoy?</h2>
+            <p class="muted">Marca con un toque lo que sí hicieron. Empiezas con pocas acciones y cada semana se suma una.</p>
+            <ul class="actions-list" id="hab-hoy" aria-labelledby="t-hoy"></ul>
+
+            <div id="hab-proximas-caja">
+              <h3>Lo que viene</h3>
+              <ul class="hab-proximas" id="hab-proximas"></ul>
+            </div>
+
+            <h3>Meta del mes</h3>
+            <p class="muted" id="hab-meta-texto"></p>
+            <div class="progress__bar"><div class="progress__fill" id="hab-meta-barra"></div></div>
+          </div>
+
+          <!-- Calendario -->
+          <div class="card hab-card">
+            <h2>Tu avance día a día</h2>
+            <ol class="calendario" id="hab-calendario"></ol>
+            <p class="leyenda">
+              <span><span class="dia dia--2"></span>Todo cumplido</span>
+              <span><span class="dia dia--1"></span>En parte</span>
+              <span><span class="dia dia--0"></span>Sin marcar</span>
+            </p>
+          </div>
+
+          <!-- Reto e insignias -->
+          <div class="card hab-card">
+            <h2>Retos y logros</h2>
+            <div class="reto">
+              <p class="reto__titulo" id="hab-reto-titulo"></p>
+              <p class="muted" id="hab-reto-texto"></p>
+              <div class="progress__bar"><div class="progress__fill" id="hab-reto-barra"></div></div>
+            </div>
+            <ul class="insignias" id="hab-insignias"></ul>
+          </div>
+        </div>
+
+        <aside class="aside">
+          <!-- Modo familia -->
+          <div class="card card--aside">
+            <h2 class="aside__title">Modo familia</h2>
+            <p class="muted">¿Quién se encarga de cada acción? Cada acción cumplida suma 1 punto.</p>
+            <ul class="hab-lista" id="hab-asignar"></ul>
+            <h3 class="aside__sub">Ranking amistoso</h3>
+            <ol class="hab-lista" id="hab-ranking"></ol>
+            <details class="apodos">
+              <summary>Cambiar apodos</summary>
+              <p class="muted">Usa apodos cortos, no nombres completos.</p>
+              <ul class="hab-lista" id="hab-apodos"></ul>
+            </details>
+          </div>
+
+          <!-- Recibo real -->
+          <div class="card card--aside">
+            <h2 class="aside__title">Tu recibo real</h2>
+            <p class="muted" id="hab-recibo-referencia"></p>
+            <form class="recibo-form" id="hab-recibo-form" novalidate>
+              <label class="label" for="hab-recibo-monto">Cuando llegue tu recibo, anota el monto</label>
+              <div class="recibo-form__fila">
+                <div class="input-group">
+                  <span class="input-group__addon" aria-hidden="true">S/</span>
+                  <input id="hab-recibo-monto" type="text" inputmode="decimal" autocomplete="off" maxlength="8" placeholder="Ej.: 85.50">
+                </div>
+                <button type="submit" class="btn btn--secondary">Anotar</button>
+              </div>
+              <p class="error" id="hab-recibo-error" role="alert" hidden>Escribe solo el monto en soles, por ejemplo 85.50.</p>
+            </form>
+            <ul class="hab-lista" id="hab-recibos"></ul>
+          </div>
+
+          <!-- Recordatorio simulado -->
+          <div class="card card--aside">
+            <h2 class="aside__title">Recordatorio diario</h2>
+            <label class="marcar"><input type="checkbox" id="hab-rec-activo"> Recordarme marcar mis acciones</label>
+            <label class="label" for="hab-rec-hora">Hora</label>
+            <input class="input" type="time" id="hab-rec-hora">
+            <p class="muted">En esta demo el recordatorio es simulado: no enviamos notificaciones.</p>
+          </div>
+
+          <div class="fact">
+            <p class="fact__eyebrow">¿Sabías que…?</p>
+            <p class="fact__text" id="hab-tip"></p>
+          </div>
+        </aside>
+      </div>
+
+      <div class="hab-fin">
+        <div>
+          <button type="button" class="btn btn--secondary" id="hab-simular">Simular 3 semanas de avance</button>
+          <p class="muted">Solo para la demo: rellena días anteriores para ver cómo se ve el hábito ya formado.</p>
+        </div>
+        <a href="#/gracias" class="btn btn--primary">Terminar la demo</a>
+      </div>
+    </section>
+
+
+    <!-- =====================================================
+         GRACIAS · enlace al cuestionario SUS
+         ===================================================== -->
+    <section class="screen" id="gracias" aria-labelledby="t-gracias">
+      <div class="welcome card">
+        <span class="eyebrow">Fin de la demo</span>
+        <h1 id="t-gracias" tabindex="-1">¡Gracias por probar AquaPlan!</h1>
+        <p class="welcome__texto">Tu opinión nos ayuda a mejorar. Cuéntanos qué tan fácil te resultó usarla en una encuesta corta.</p>
+        <a class="btn btn--primary btn--tall" id="sus-enlace" target="_blank" rel="noopener">Responder la encuesta</a>
+        <p class="welcome__aviso" id="sus-pendiente" hidden>La persona que te acompaña te dará la encuesta.</p>
+        <a href="#/habito" class="btn btn--secondary">Volver a mi plan</a>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="pie">
+    <div class="container pie__inner">
+      <p>Simulación académica. Las cifras son estimaciones referenciales calculadas con promedios; no corresponden a un medidor real ni a tu recibo.</p>
+      <button type="button" class="pie__boton" id="reiniciar-demo">Reiniciar demo</button>
+    </div>
+  </footer>
+
+  <p class="toast" id="toast" role="status" hidden></p>
+
+  <script src="js/config.js"></script>
+  <script src="js/calculo.js"></script>
+  <script src="js/estado.js"></script>
+  <script src="js/recibo.js"></script>
+  <script src="js/habito.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
